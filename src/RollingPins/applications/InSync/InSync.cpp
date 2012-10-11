@@ -258,7 +258,6 @@ static void handlePeakMessage(Message_t* msg)
   onPeakDetected();
 }
 
-// TODO: remove sometime
 static void handleCmdMessage(Message_t* msg)
 {
   Command_msg* command = (Command_msg*)msg->data;

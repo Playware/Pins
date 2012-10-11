@@ -42,6 +42,7 @@
 \newtheorem{solution}[theorem]{Solution}
 \newtheorem{summary}[theorem]{Summary}
 \newenvironment{proof}[1][Proof]{\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+\lstset{language=C}
 %----------------------------------------------------------
 \begin{document}
 
@@ -709,7 +710,35 @@ struct Message_msg
   \item Receive a message: Subscribe to a message with \texttt{comm.subscribe(uint8\_t msgType, void (*callback)())} where the message will be delivered to function pass in \texttt{callback()}.
 \end{itemize}
 
-\lstset{language=C}
+
+\chapter{In-Sync Application}
+
+In-Sync is a application that lives in the \textbf{application} directory. The application expects two users holding a pin each, while one of the pins plays a song, the users mission is to 
+shake the pin in synchrony to each other. The music playing is only to help the users. If the users are able to be synchronous the music gets louder, the lights of the pins get more intense and the color of the pins gets in sync.\\
+
+When a pin is turned on, the pin starts in pairing mode. That is, the pin searches for another 
+pin, running the same program. It does so by sending request messages with 500 ms interval until another 
+pin replies with a handshake. The pin that receives the handshake becomes a master pin. This is depicted in figure \ref{fig:pairing_diagram}.
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=0.7\textwidth]{figures/pairing_diagram.pdf}
+  \caption{Pairing two pins and deciding which will be a master.}
+  \label{fig:pairing_diagram}
+\end{figure}
+
+After the pairing, a process starts to detect pin shakes or peaks. A peak is detected when the magnitude of 
+the accelerometers is over a certain threshold (2.3), then we wait for another peak to be detected by the other pin and update the score depending on the distance of the peaks. If only one peak is detected the score is lowered. This is also depicted in figure \ref{fig:insync_diagram}. The score is then used to determine the sound level of the music playing, the LED light intensity and the duration of the vibration.
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=0.7\textwidth]{figures/insync_diagram.pdf}
+  \caption{Flow diagram of the In-Sync application.}
+  \label{fig:insync_diagram}
+\end{figure}
+
+The next step is to make a application where two users, is to extend this application where one user
+does a certain gesture and the other one needs to mimic it.
 
 \chapter{Questions and Answers}
 \begin{itemize}
